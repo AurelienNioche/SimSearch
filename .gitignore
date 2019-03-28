@@ -1,5 +1,5 @@
 # Virtual environment
-ss-env/
+env/
 
 # Build
 dist/
@@ -7,10 +7,15 @@ build/
 simsearch/stroke.c
 simsearch/stroke.so
 *.egg-info
+.simsearch-installed
+.models-created
 
 # Pycharm settings
 .idea
-simsearch/__init__.pyc
-simsearch/heap_cache.pyc
-simsearch/models.pyc
-simsearch/settings.pyc
+
+# Python
+*.pyc
+
+# MacOs
+.DS_Store
+

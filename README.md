@@ -21,24 +21,20 @@ Initially developed by Lars Yencken (https://github.com/larsyencken/simsearch).
 * Ensure that a mongodb server is running
         
         brew services start mongodb
+ 
+ 
+* Execute the Makefile (create virtual environment, install dependencies, create models) [Inside project folder] 
+ 
+        make
+        
+* Active virtual environment [Inside project folder] 
 
-* Create a virtual environment
-
-        virtualenv ss-env
- 
- 
-* Execute the Makefile
- 
-        bash Makefile
- 
-* Compute similarity / nodes
-
-        python -m simsearch.models
+        source env/bin/activate
         
 
 ## Run
 
-Run locally
+Run locally [Inside project folder and after activation of the virtual environment]
 
         python simsearch.py
 

@@ -1,7 +1,6 @@
 
 serve: .simsearch-installed .models-created
 	env/bin/python setup.py develop
-	env/bin/python simsearch.py
 
 env: requirements.txt
 	test -d env || virtualenv -p python2.7 env
