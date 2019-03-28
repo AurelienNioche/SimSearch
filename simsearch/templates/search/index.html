@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block headers %}
+  <link href="{{MEDIA_URL}}css/lookup.css" rel="stylesheet" type="text/css">
+{% endblock %}
+
+{% block body_tags %}onload="document.getElementById('seedInput').focus()"{% endblock %}
+
+{% block content %}
+<div id="seedLookup">
+  <form method="GET">
+    <input id="seedInput" type="text" name="kanji" value="{{kanji}}" />
+    <a onclick="submit();"><img src="{{MEDIA_URL}}img/magnifier.png" /></a>
+  </form>
+  <br/>
+  <p align="center">
+  {% if error %}
+    {{error}} (<a href="/help/">help</a>)
+  {% else %}
+    Enter the kanji you want to find, or one that looks similar.
+  {% endif %}
+  </p>
+</div>
+{% endblock %}
