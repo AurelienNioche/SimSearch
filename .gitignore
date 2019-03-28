@@ -1,25 +1,12 @@
+# Virtual environment
+ss-env/
 
+# Build
+dist/
 build/
-
 simsearch/stroke.c
 simsearch/stroke.so
-*.pyo
-*.pyc
-.simsearch-installed
-.models-created
-
-ss-env/
-dist/
-
-.DS_Store
-*.tgz
 *.egg-info
-*.log
-distribute*.tar.gz
-.scon*
-*.paths
-*.csv
-tags
-*.swp
-*.orig
-local_settings.py
+
+# Pycharm settings
+.idea

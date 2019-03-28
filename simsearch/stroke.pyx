@@ -6,17 +6,17 @@
 #  Created by Lars Yencken on 03-09-2010.
 #  Copyright 2010 Lars Yencken. All rights reserved.
 #
+#  Revised by Aurélien Nioche on 23-03-2019
 
 """
 Optimised Levenstein distance calculation between stroke signatures for two
 kanji.
 """
 
-import os
-
 from cjktools.common import sopen
 
 from simsearch import settings
+
 
 cdef class StrokeEditDistance:
     """The edit distance between stroke sequences for both kanji."""
@@ -79,18 +79,18 @@ cdef edit_distance(s_py, t_py):
     if s_len > 99 or t_len > 99:
         raise ValueError, "stroke sequences too long"
 
-    for 0 <= i < s_len:
+    for i in range(s_len):  # 0 <= i < s_len:
         table[i][0] = i
         s[i] = s_py[i]
     table[s_len][0] = s_len
 
-    for 0 <= j < t_len:
+    for j in range(t_len):  # 0 <= j < t_len:
         table[0][j] = j
         t[j] = t_py[j]
     table[0][t_len] = t_len
 
-    for 1 <= i <= s_len:
-        for 1 <= j <= t_len:
+    for i in range(1, s_len+1):  # 1 <= i <= s_len:
+        for j in range(1, t_len+1):  # 1 <= j <= t_len:
             if s[i-1] == t[j-1]:
                 cost = 0
             else:
@@ -111,5 +111,3 @@ cdef edit_distance(s_py, t_py):
                     table[i][j] = diag
 
     return table[s_len][t_len]
-
-# vim: ts=4 sw=4 sts=4 et tw=78:

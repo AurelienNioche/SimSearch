@@ -6,6 +6,7 @@
 #  Created by Lars Yencken on 2011-10-26.
 #  Copyright 2011 Lars Yencken. All rights reserved.
 #
+#  Revised by Aurélien Nioche on 23-03-2019
 
 """
 Package information for simsearch.
@@ -24,17 +25,18 @@ setup(
     license='BSD',
     install_requires=[
         'cjktools>=1.5.0',
-        'cjktools-data>=0.2.1-2010-07-29',
-        'consoleLog>=0.2.4',
-        'simplestats>=0.2.0',
-        'pymongo',
         'mongoengine>=0.3',
-        'pyyaml',
         'nltk',
-        'mercurial',
         'flask',
         'simplejson',
-        'cython'
+        'cython',
+        'simplestats>=0.2.0',  # Only for experiments
+        'consoleLog>=0.2.4',   # Only for experiments
+        # # Not necessary?
+        # 'cjktools-data>=0.2.1-2010-07-29',
+        # 'simplestats>=0.2.0',
+        # 'pymongo',
+        # 'pyyaml',
     ],
     packages=['simsearch'],
     ext_modules=[Extension(

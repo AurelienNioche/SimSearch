@@ -7,6 +7,7 @@
 #  Created by Lars Yencken on 03-09-2010.
 #  Copyright 2010 Lars Yencken. All rights reserved.
 #
+#  Revised by Aurélien Nioche on 23-03-2019
 
 """
 A script to simulate how users might search with the system. Query paths
@@ -19,10 +20,10 @@ import optparse
 import codecs
 import random
 
-from consoleLog import withProgress
+import consoleLog
 
-from simsearch import settings
-from simsearch.search import stroke, models
+from simsearch import settings, stroke, models
+
 
 def simulate_search(output_file, strategy='greedy',
         k=settings.N_NEIGHBOURS_RECALLED, error_rate=0.0):
@@ -42,15 +43,16 @@ def simulate_search(output_file, strategy='greedy',
         raise ValueError(strategy)
 
     traces = []
-    for query, target in withProgress(_load_search_examples()):
+    for query, target in consoleLog.withProgress(_load_search_examples()):
         path = search_fn(query, target, k=k, error_rate=error_rate)
         traces.append((query, target, path))
 
     TraceFile.save(traces, output_file)
     print 'Paths dumped to %s' % output_file
 
+
 class TraceFile(object):
-    "A basic human-readable query path file format."
+    """A basic human-readable query path file format."""
     @staticmethod
     def save(traces, filename):
         with codecs.open(filename, 'w', 'utf8') as ostream:
@@ -61,12 +63,11 @@ class TraceFile(object):
                     # have at least a partial search
                     if path[-1] == target:
                         # success
-                        print >> ostream, u'%s\t%s\t[%s]' % (query, target,
-                                ''.join(path[1:-1]))
+                        print >> ostream, u'%s\t%s\t[%s]' % (query, target, ''.join(path[1:-1]))
+
                     else:
                         # failure with partial path
-                        print >> ostream, u'%s\t(%s)\t[%s]' % (query, target,
-                                ''.join(path[1:]))
+                        print >> ostream, u'%s\t(%s)\t[%s]' % (query, target, ''.join(path[1:]))
                 
                 else:
                     # failure without partial path
@@ -98,6 +99,7 @@ class TraceFile(object):
 
         return traces
 
+
 def _load_search_examples():
     flashcard_file = os.path.join(settings.DATA_DIR, 'similarity', 'flashcard')
     results = []
@@ -109,8 +111,8 @@ def _load_search_examples():
 
     return results
 
-def _greedy_search(query, target, limit=5, k=settings.N_NEIGHBOURS_RECALLED,
-        error_rate=0.0):
+
+def _greedy_search(query, target, limit=5, k=settings.N_NEIGHBOURS_RECALLED, error_rate=0.0):
     """
     Simulate a search between the query and target where the user always
     chooses the next kanji which looks closest to the target.
@@ -152,6 +154,7 @@ def _greedy_search(query, target, limit=5, k=settings.N_NEIGHBOURS_RECALLED,
 
     return path
 
+
 def _breadth_first_search(query, target, limit=5,
         k=settings.N_NEIGHBOURS_RECALLED, error_rate=0.0):
     """
@@ -159,7 +162,7 @@ def _breadth_first_search(query, target, limit=5,
     shortest path from the query to the target (within the limit).
     """
     paths = [[query]]
-    shortest = set([query]) # has a shortest path been checked
+    shortest = {query}  # has a shortest path been checked
     while paths:
         current = paths.pop(0)
         current_query = current[-1]
@@ -180,8 +183,8 @@ def _breadth_first_search(query, target, limit=5,
             shortest.update(neighbours)
             paths.extend((current + [n]) for n in neighbours)
 
-def _random_stumble(query, target, limit=5, k=settings.N_NEIGHBOURS_RECALLED,
-        error_rate=0.0):
+
+def _random_stumble(query, target, limit=5, k=settings.N_NEIGHBOURS_RECALLED, error_rate=0.0):
     """
     A worst-case simulation of user search, completely unguided by the
     target kanji (except for the initial query).
@@ -199,7 +202,8 @@ def _random_stumble(query, target, limit=5, k=settings.N_NEIGHBOURS_RECALLED,
 
     return path
 
-class cache(object):
+
+class Cache(object):
     """
     A simple cache wrapper whose contents never expire. Useful for reducing
     expensive calls on small datasets.
@@ -219,40 +223,47 @@ class cache(object):
         # workaround for StrokeEditDistance also acting like a container
         return self.f.__contains__(key)
 
-@cache
+
+@Cache
 def _get_neighbours(query, k=settings.N_NEIGHBOURS_RECALLED):
     neighbours = set(n.kanji for n in models.Node.objects.get(
             pivot=query).neighbours[:k])
     return neighbours
 
-sed = cache(stroke.StrokeEditDistance())
 
-#----------------------------------------------------------------------------#
+sed = Cache(stroke.StrokeEditDistance())
+
+# ---------------------------------------------------------------------------- #
+
 
 def _create_option_parser():
     usage = \
-"""%prog [options] output_file
-
-Simulate queries through the search graph, dumping the traces to the given
-file."""
+        """%prog [options] output_file
+        
+        Simulate queries through the search graph, dumping the traces to the given
+        file."""
 
     parser = optparse.OptionParser(usage)
 
-    parser.add_option('--strategy', action='store', type='choice',
-            choices=['greedy', 'shortest', 'random'], dest='strategy',
-            default='greedy',
-            help='The search strategy to use ([greedy]/shortest/random)')
+    parser.add_option(
+        '--strategy', action='store', type='choice',
+        choices=['greedy', 'shortest', 'random'], dest='strategy',
+        default='greedy',
+        help='The search strategy to use ([greedy]/shortest/random)')
     
-    parser.add_option('-k', action='store', type='int',
-            default=settings.N_NEIGHBOURS_RECALLED, dest='k',
-            help='The number of neighbours displayed each query [%d]' % \
-            settings.N_NEIGHBOURS_RECALLED)
+    parser.add_option(
+        '-k', action='store', type='int',
+        default=settings.N_NEIGHBOURS_RECALLED, dest='k',
+        help='The number of neighbours displayed each query [%d]' % \
+        settings.N_NEIGHBOURS_RECALLED)
 
-    parser.add_option('-e', action='store', type='float',
-            default=0.0, dest='error_rate',
-            help='Factor in an estimated recognition error rate [0.0]')
+    parser.add_option(
+        '-e', action='store', type='float',
+        default=0.0, dest='error_rate',
+        help='Factor in an estimated recognition error rate [0.0]')
 
     return parser
+
 
 def main(argv):
     parser = _create_option_parser()
@@ -262,12 +273,10 @@ def main(argv):
         parser.print_help()
         sys.exit(1)
 
-    simulate_search(args[0], strategy=options.strategy, k=options.k,
-            error_rate=options.error_rate)
+    simulate_search(args[0], strategy=options.strategy, k=options.k, error_rate=options.error_rate)
 
-#----------------------------------------------------------------------------#
+# ---------------------------------------------------------------------------- #
+
 
 if __name__ == '__main__':
     main(sys.argv[1:])
-
-# vim: ts=4 sw=4 sts=4 et tw=78:

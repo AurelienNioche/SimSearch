@@ -6,6 +6,7 @@
 #  Created by Lars Yencken on 28-08-2010.
 #  Copyright 2010 Lars Yencken. All rights reserved.
 #
+#  Revised by Aurélien Nioche on 23-03-2019
 
 """
 Database models for similarity search.
@@ -26,14 +27,14 @@ import heap_cache
 
 from simsearch import settings
 
+
 class Similarity(mongoengine.Document):
-    "Raw similarity scores for kanji pairs."
+    """Raw similarity scores for kanji pairs."""
     kanji_pair = mongoengine.StringField(max_length=2, primary_key=True)
-    similarity = mongoengine.FloatField(min_value=0.0, max_value=1.0,
-            required=True)
+    similarity = mongoengine.FloatField(min_value=0.0, max_value=1.0, required=True)
 
     def partner_to(self, kanji):
-        "Returns the partnering kanji in this pair."
+        """Returns the partnering kanji in this pair."""
         if kanji not in self.kanji_pair:
             raise ValueError('kanji not part of this pair')
 
@@ -47,8 +48,7 @@ class Similarity(mongoengine.Document):
         kanji_set = _get_kanji()
 
         cache = heap_cache.FixedSimilarityCache(settings.N_NEIGHBOURS_STORED)
-        pairs = ((a, b) for (a, b) in itertools.product(kanji_set, kanji_set)
-                if (a < b))
+        pairs = ((a, b) for (a, b) in itertools.product(kanji_set, kanji_set) if (a < b))
             
         for kanji_a, kanji_b in pairs:
             distance = sed(kanji_a, kanji_b)
@@ -80,11 +80,11 @@ class Similarity(mongoengine.Document):
         return cache
 
     def __unicode__(self):
-        return u'(%s, %s, %f)' % (self.kanji_pair[0], self.kanji_pair[1],
-                self.similarity)
+        return u'(%s, %s, %f)' % (self.kanji_pair[0], self.kanji_pair[1], self.similarity)
+
 
 class Neighbour(mongoengine.EmbeddedDocument):
-    "A weighted graph edge."
+    """A weighted graph edge."""
     kanji = mongoengine.StringField(max_length=1)
     weight = mongoengine.FloatField(min_value=0.0)
 
@@ -93,6 +93,7 @@ class Neighbour(mongoengine.EmbeddedDocument):
 
     def __unicode__(self):
         return self.kanji
+
 
 class Node(mongoengine.Document):
     """
@@ -105,7 +106,7 @@ class Node(mongoengine.Document):
     n_updates = mongoengine.IntField(default=0, min_value=0)
 
     def at(self, kanji):
-        "Gets the neighbour described by the given kanji."
+        """Gets the neighbour described by the given kanji."""
         for neighbour in self.neighbours:
             if neighbour.kanji == kanji:
                 return neighbour
@@ -114,7 +115,7 @@ class Node(mongoengine.Document):
 
     @classmethod
     def build(cls, cache=None):
-        "Builds the initial graph for Q learning."
+        """Builds the initial graph for Q learning."""
         print 'Building neighbourhood graph'
         n = settings.N_NEIGHBOURS_RECALLED
 
@@ -127,16 +128,14 @@ class Node(mongoengine.Document):
             node = Node(pivot=kanji, neighbours=[])
 
             weights = {}
-            best_n = sorted(cache.get_heap(kanji).get_contents(),
-                    reverse=True)[:n]
+            best_n = sorted(cache.get_heap(kanji).get_contents(), reverse=True)[:n]
+
             for weight, partner in best_n:
                 weights[partner] = weight * dist.prob(partner)
             total_weights = sum(weights.itervalues())
 
-            for partner, weight in sorted(weights.iteritems(),
-                    key=lambda p: p[1], reverse=True):
-                node.neighbours.append(Neighbour(kanji=partner,
-                        weight=weight / total_weights))
+            for partner, weight in sorted(weights.iteritems(), key=lambda p: p[1], reverse=True):
+                node.neighbours.append(Neighbour(kanji=partner, weight=weight / total_weights))
             
             node.save()
 
@@ -156,7 +155,7 @@ class Node(mongoengine.Document):
 
     @classmethod
     def get_coverage(cls):
-        "Returns the set of kanji for which neighbours are stored."
+        """Returns the set of kanji for which neighbours are stored."""
         db = cls.objects._collection
         return set(r['_id'] for r in db.find({}, fields=['_id']))
 
@@ -167,8 +166,7 @@ class Node(mongoengine.Document):
         if len(nodes) != len(path):
             found_pivots = set(n.pivot for n in nodes)
             missing_kanji = [k for k in path if k not in found_pivots][0]
-            raise ValueError('node not found in database for kanji %s' % \
-                    missing_kanji.encode('utf8'))
+            raise ValueError('node not found in database for kanji %s' % missing_kanji.encode('utf8'))
 
         # cache Q(s, a) for the subgraph we're interested in
         q = cls._cache_subgraph(nodes)
@@ -230,8 +228,9 @@ class Node(mongoengine.Document):
     def __unicode__(self):
         return self.pivot
 
+
 class Trace(mongoengine.Document):
-    "A search path through the graph, as taken by a user."
+    """A search path through the graph, as taken by a user."""
     ip_address = mongoengine.StringField(max_length=15)
     path = mongoengine.ListField(mongoengine.StringField(max_length=1))
 
@@ -240,8 +239,9 @@ class Trace(mongoengine.Document):
         ip = request.remote_addr
         cls(ip_address=ip, path=list(path)).save()
 
+
 class Translation(mongoengine.Document):
-    "A per-kanji dictionary entry of readings and translations."
+    """A per-kanji dictionary entry of readings and translations."""
     kanji = mongoengine.StringField(max_length=1, primary_key=True)
     on_readings = mongoengine.ListField(mongoengine.StringField())
     kun_readings = mongoengine.ListField(mongoengine.StringField())
@@ -264,16 +264,18 @@ class Translation(mongoengine.Document):
                 )
             translation.save()
 
+
 def build():
-    "Builds the database."
+    """Builds the database."""
     cache = Similarity.build()
     Node.build(cache)
     Translation.build()
 
-#----------------------------------------------------------------------------#
+# ---------------------------------------------------------------------------- #
+
 
 def _get_kanji():
-    "Fetches our canonical list of kanji to work with."
+    """Fetches our canonical list of kanji to work with."""
     if not hasattr(_get_kanji, '_cached'):
         kanji_set = set()
         with codecs.open(settings.STROKE_SOURCE, 'r', 'utf8') as istream:
@@ -292,9 +294,8 @@ def _get_kanji():
 
     return _get_kanji._cached
 
-#----------------------------------------------------------------------------#
+# ---------------------------------------------------------------------------- #
+
 
 if __name__ == '__main__':
     build()
-
-# vim: ts=4 sw=4 sts=4 et tw=78:

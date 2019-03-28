@@ -6,6 +6,7 @@
 #  Created by Lars Yencken on 30-08-2010.
 #  Copyright 2010 Lars Yencken. All rights reserved.
 #
+#  Revised by Aurélien Nioche on 23-03-2019
 
 """
 Caches to aid similarity caculation, to efficiently maintain only the highest
@@ -14,9 +15,11 @@ similarity neighbours.
 
 import heapq
 
+
 class TopNHeap(object):
-    "A heap which only keeps the top-n items and their weights."
+    """A heap which only keeps the top-n items and their weights."""
     __slots__ = '_n', '_backing_list'
+
     def __init__(self, n):
         self._n = n
         self._backing_list = []
@@ -28,6 +31,7 @@ class TopNHeap(object):
 
     def get_contents(self):
         return self._backing_list
+
 
 class FixedSimilarityCache(object):
     """
@@ -52,7 +56,6 @@ class FixedSimilarityCache(object):
         self._sum += similarity
         self._sum_squared += similarity * similarity
 
-
     def __getitem__(self, kanji):
         return self.get_heap(kanji)
 
@@ -64,6 +67,3 @@ class FixedSimilarityCache(object):
 
     def get_mean(self):
         return self._sum / self._n_seen
-
-# vim: ts=4 sw=4 sts=4 et tw=78:
-

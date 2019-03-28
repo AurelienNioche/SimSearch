@@ -7,6 +7,7 @@
 #  Created by Lars Yencken on 05-09-2010.
 #  Copyright 2010 Lars Yencken. All rights reserved.
 #
+#  Revised by Aurélien Nioche on 23-03-2019
 
 """
 A basic simulation of accessibility improvements estimated from use of visual
@@ -22,11 +23,12 @@ import random
 from simplestats import FreqDist, basic_stats
 
 from simsearch import settings
-from simsearch.search import models
+from simsearch import models
 
 DEFAULT_THRESHOLD = 0.95
 
-def simulate_accessibility(output_file, threshold=DEFAULT_THRESHOLD):
+
+def simulate_accessibility(output_file):
     print 'Loading frequency distribution'
     dist = FreqDist.from_file(settings.FREQ_SOURCE)
 
@@ -60,8 +62,8 @@ def simulate_accessibility(output_file, threshold=DEFAULT_THRESHOLD):
                         len(accessible_set))
         print >> ostream, u'%d,%d' % (len(known_set), len(accessible_set))
 
-    print 'Average neighbourhood size: %.02f (σ = %.02f)' % \
-            basic_stats(n_neighbours)
+    print 'Average neighbourhood size: %.02f (σ = %.02f)' % basic_stats(n_neighbours)
+
 
 class RestrictedGraph(object):
     def __init__(self, threshold=DEFAULT_THRESHOLD):
@@ -70,32 +72,32 @@ class RestrictedGraph(object):
 
     def __getitem__(self, kanji):
         neighbour_heap = self._graph[kanji]
-        ordered_neighbourhood = sorted(neighbour_heap.get_contents(),
-                reverse=True)
+        ordered_neighbourhood = sorted(neighbour_heap.get_contents(), reverse=True)
 
         first_sim, first_neighbour = ordered_neighbourhood[0]
-        cutoff_neighbours = set(n for (s, n) in ordered_neighbourhood
-                if s >= self._threshold * first_sim)
+        cutoff_neighbours = set(n for (s, n) in ordered_neighbourhood if s >= self._threshold * first_sim)
 
         return cutoff_neighbours
 
-#----------------------------------------------------------------------------#
+# ---------------------------------------------------------------------------- #
+
 
 def _create_option_parser():
     usage = \
-"""%prog [options] output_file.csv
-
-Simulates how many kanji are accessible as kanji are learned, assuming they
-are studied in frequency order."""
+        """%prog [options] output_file.csv
+        
+        Simulates how many kanji are accessible as kanji are learned, assuming they
+        are studied in frequency order."""
 
     parser = optparse.OptionParser(usage)
 
-    parser.add_option('-t', action='store', dest='threshold',
-            default=DEFAULT_THRESHOLD, type='float',
-            help='The neighbourhood cutoff threshold [%.02f]' % \
-                    DEFAULT_THRESHOLD)
+    parser.add_option(
+        '-t', action='store', dest='threshold',
+        default=DEFAULT_THRESHOLD, type='float',
+        help='The neighbourhood cutoff threshold [%.02f]' % DEFAULT_THRESHOLD)
 
     return parser
+
 
 def main(argv):
     parser = _create_option_parser()
@@ -107,9 +109,8 @@ def main(argv):
 
     simulate_accessibility(args[0], threshold=options.threshold)
 
-#----------------------------------------------------------------------------#
+# --------------------------------------------------------------------------- #
+
 
 if __name__ == '__main__':
     main(sys.argv[1:])
-
-# vim: ts=4 sw=4 sts=4 et tw=78:

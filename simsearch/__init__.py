@@ -15,9 +15,9 @@ import os
 
 import flask
 from cjktools import scripts
-import mercurial.hg
-import mercurial.ui
-import mercurial.node
+# import mercurial.hg
+# import mercurial.ui
+# import mercurial.node
 import simplejson
 import mongoengine
 
@@ -29,24 +29,28 @@ app.config.from_object('simsearch.settings')
 if 'SIMSEARCH_SETTINGS' in os.environ:
     app.config.from_envvar('SIMSEARCH_SETTINGS')
 
+
 @app.route('/help/')
 def help():
     c = base_context()
     return flask.render_template('static/help.html', **c)
+
 
 @app.route('/feedback/')
 def feedback():
     c = base_context()
     return flask.render_template("static/feedback.html", **c)
 
+
 @app.route('/about/')
 def about():
     c = base_context()
     return flask.render_template("static/about.html", **c)
 
+
 @app.route('/')
 def index():
-    "Renders the search display."
+    """Renders the search display."""
     kanji = flask.request.args.get('kanji', '')
     kanji_ok = _is_kanji(kanji)
     context = base_context()
@@ -85,9 +89,10 @@ def index():
                 })})
     return flask.render_template('search/display.html', **context)
 
+
 @app.route('/translate/<kanji>/')
 def translate(kanji):
-    "Updates the query model before redirecting to the real translation."
+    """Updates the query model before redirecting to the real translation."""
     kanji = kanji or flask.request.args.get('kanji')
     if not _is_kanji(kanji):
         flask.abort(404)
@@ -106,13 +111,14 @@ def translate(kanji):
     c['translation'] = t
     return flask.render_template('translate/kanji.html', **c)
 
+
 @app.route('/search/<pivot>/')
 def search_json(pivot):
-    "Returns the search display data as JSON."
+    """Returns the search display data as JSON."""
     pivot = pivot or flask.request.args.get('pivot')
     node = models.Node.objects.get(pivot=pivot)
     neighbours = [n.kanji for n in sorted(node.neighbours, reverse=True)]
-    neighbours = neighbours[:app.conf['N_NEIGHBOURS_RECALLED']]
+    neighbours = neighbours[:app.config['N_NEIGHBOURS_RECALLED']]
 
     return flask.jsonify(
             pivot_kanji=pivot,
@@ -121,25 +127,27 @@ def search_json(pivot):
             tier3=neighbours[9:],
         )
 
+
 def _is_kanji(kanji):
     return isinstance(kanji, unicode) and len(kanji) == 1 \
             and scripts.script_type(kanji) == scripts.Script.Kanji
 
+
 def base_context():
     c = {}
-    c.update(mercurial_revision())
+    # c.update(mercurial_revision())
     c.update(site_settings())
     return c
 
-def mercurial_revision():
-    project_base = os.path.join(app.config['PROJECT_ROOT'], '..')
-    repo = mercurial.hg.repository(mercurial.ui.ui(), project_base)
-    fctx = repo.filectx(project_base, 'tip')
-
-    return {'revision': {
-                'short': mercurial.node.short(fctx.node()),
-                'number': fctx.rev(),
-            }}
+# def mercurial_revision():
+#     #project_base = app.config['PROJECT_ROOT'] #os.path.join(app.config['PROJECT_ROOT'], '..')
+#     #repo = mercurial.hg.repository(mercurial.ui.ui(), project_base)
+#     #fctx = repo.filectx(project_base, 'tip')
+#
+#     return {'revision': {
+#                 'short': 'tamere',#mercurial.node.short(fctx.node()),
+#                 'number': 34,#fctx.rev(),
+#             }}
 
 def site_settings():
     return {'settings': app.config, 'MEDIA_URL': app.config['MEDIA_URL']}
