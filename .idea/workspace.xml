@@ -1,30 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="fefcf8e0-8a29-4859-8362-22af00e1dcbe" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.rst" beforeDir="false" afterPath="$PROJECT_DIR$/README_initial.rst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SConstruct" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/setup.py" beforeDir="false" afterPath="$PROJECT_DIR$/setup.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/simsearch/SConscript" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/simsearch/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/simsearch/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/simsearch/context.py" beforeDir="false" afterPath="$PROJECT_DIR$/.django/context.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/simsearch/experiments/check_connectivity.py" beforeDir="false" afterPath="$PROJECT_DIR$/simsearch/experiments/check_connectivity.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/simsearch/experiments/evaluate_paths.py" beforeDir="false" afterPath="$PROJECT_DIR$/simsearch/experiments/evaluate_paths.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/simsearch/experiments/simulate_accessibility.py" beforeDir="false" afterPath="$PROJECT_DIR$/simsearch/experiments/simulate_accessibility.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/simsearch/experiments/simulate_search.py" beforeDir="false" afterPath="$PROJECT_DIR$/simsearch/experiments/simulate_search.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/simsearch/heap_cache.py" beforeDir="false" afterPath="$PROJECT_DIR$/simsearch/heap_cache.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/simsearch/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/simsearch/models.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/simsearch/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/simsearch/settings.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/simsearch/stroke.pyx" beforeDir="false" afterPath="$PROJECT_DIR$/simsearch/stroke.pyx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/simsearch/templates/base.html" beforeDir="false" afterPath="$PROJECT_DIR$/simsearch/templates/base.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/simsearch/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/.django/urls.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/simsearch/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/.django/views.py" afterDir="false" />
-    </list>
+    <list default="true" id="fefcf8e0-8a29-4859-8362-22af00e1dcbe" name="Default Changelist" comment="" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -108,8 +85,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/.gitignore">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="135">
-              <caret line="9" lean-forward="true" selection-start-line="9" selection-end-line="9" />
+            <state relative-caret-position="165">
+              <caret line="11" column="1" selection-start-line="11" selection-start-column="1" selection-end-line="11" selection-end-column="1" />
             </state>
           </provider>
         </entry>
@@ -333,12 +310,20 @@
       <workItem from="1553766708470" duration="6268000" />
       <workItem from="1553778400655" duration="2000" />
       <workItem from="1553778413634" duration="3333000" />
-      <workItem from="1553784429494" duration="3531000" />
+      <workItem from="1553784429494" duration="3579000" />
     </task>
+    <task id="LOCAL-00001" summary="update">
+      <created>1553788171302</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1553788171302</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="13134000" />
+    <option name="totallyTimeSpent" value="13182000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="49" y="23" width="1813" height="1212" extended-state="0" />
@@ -399,6 +384,8 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/cjkdata" />
     </ignored-roots>
+    <MESSAGE value="update" />
+    <option name="LAST_COMMIT_MESSAGE" value="update" />
   </component>
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/simsearch/stroke.c">
@@ -697,8 +684,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/.gitignore">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="135">
-          <caret line="9" lean-forward="true" selection-start-line="9" selection-end-line="9" />
+        <state relative-caret-position="165">
+          <caret line="11" column="1" selection-start-line="11" selection-start-column="1" selection-end-line="11" selection-end-column="1" />
         </state>
       </provider>
     </entry>

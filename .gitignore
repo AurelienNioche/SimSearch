@@ -10,3 +10,7 @@ simsearch/stroke.so
 
 # Pycharm settings
 .idea
+simsearch/__init__.pyc
+simsearch/heap_cache.pyc
+simsearch/models.pyc
+simsearch/settings.pyc
