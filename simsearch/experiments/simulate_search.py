@@ -20,7 +20,7 @@ import optparse
 import codecs
 import random
 
-import consoleLog
+from tqdm import tqdm
 
 from simsearch import settings, stroke, models
 
@@ -43,12 +43,12 @@ def simulate_search(output_file, strategy='greedy',
         raise ValueError(strategy)
 
     traces = []
-    for query, target in consoleLog.withProgress(_load_search_examples()):
+    for query, target in tqdm(_load_search_examples()):
         path = search_fn(query, target, k=k, error_rate=error_rate)
         traces.append((query, target, path))
 
     TraceFile.save(traces, output_file)
-    print 'Paths dumped to %s' % output_file
+    print(f'Paths dumped to {output_file}')
 
 
 class TraceFile(object):
@@ -56,22 +56,22 @@ class TraceFile(object):
     @staticmethod
     def save(traces, filename):
         with codecs.open(filename, 'w', 'utf8') as ostream:
-            print >> ostream, u"#query\ttarget\tvia"
+            print(u"#query\ttarget\tvia", file=ostream)
             for query, target, path in traces:
                 if path:
                     assert path[0] == query
                     # have at least a partial search
                     if path[-1] == target:
                         # success
-                        print >> ostream, u'%s\t%s\t[%s]' % (query, target, ''.join(path[1:-1]))
+                        print(u'%s\t%s\t[%s]' % (query, target, ''.join(path[1:-1])), file=ostream)
 
                     else:
                         # failure with partial path
-                        print >> ostream, u'%s\t(%s)\t[%s]' % (query, target, ''.join(path[1:]))
+                        print(u'%s\t(%s)\t[%s]' % (query, target, ''.join(path[1:])), file=ostream)
                 
                 else:
                     # failure without partial path
-                    print >> ostream, u'%s\t(%s)\tNone' % (query, target)
+                    print(u'%s\t(%s)\tNone' % (query, target), file=ostream)
 
     @staticmethod
     def load(filename):
@@ -155,8 +155,7 @@ def _greedy_search(query, target, limit=5, k=settings.N_NEIGHBOURS_RECALLED, err
     return path
 
 
-def _breadth_first_search(query, target, limit=5,
-        k=settings.N_NEIGHBOURS_RECALLED, error_rate=0.0):
+def _breadth_first_search(query, target, limit=5, k=settings.N_NEIGHBOURS_RECALLED):
     """
     Perform breadth first search to a fixed depth limit, returning the
     shortest path from the query to the target (within the limit).

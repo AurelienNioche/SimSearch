@@ -15,13 +15,10 @@ import os
 
 import flask
 from cjktools import scripts
-# import mercurial.hg
-# import mercurial.ui
-# import mercurial.node
 import simplejson
 import mongoengine
 
-import models
+import simsearch.models as models
 
 app = flask.Flask(__name__)
 app.config.from_object('simsearch.settings')
@@ -129,7 +126,7 @@ def search_json(pivot):
 
 
 def _is_kanji(kanji):
-    return isinstance(kanji, unicode) and len(kanji) == 1 \
+    return len(kanji) == 1 \
             and scripts.script_type(kanji) == scripts.Script.Kanji
 
 
@@ -148,6 +145,7 @@ def base_context():
 #                 'short': 'tamere',#mercurial.node.short(fctx.node()),
 #                 'number': 34,#fctx.rev(),
 #             }}
+
 
 def site_settings():
     return {'settings': app.config, 'MEDIA_URL': app.config['MEDIA_URL']}

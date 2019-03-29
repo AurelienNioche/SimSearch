@@ -20,7 +20,7 @@
 
   #pivot { font-size: 200px; vertical-align: middle; text-align: right; }
   .readings > tbody > tr > th { text-align: right; vertical-align: top; }
-  td, th, p, h2, h3 { font: 300 "Helvetica Neue", Helvetica, "Arial Unicode MS",
+  td, th, p, h2, h3 { font: 300px "Helvetica Neue", Helvetica, "Arial Unicode MS",
     Arial, sans-serif; }
   p, li, td, th { font-size: 1.2em }
   h3 { font-size: 1.3em; margin-bottom: 0.3em; }
@@ -63,13 +63,13 @@
     <li>{{v}}</li>
   {% endfor %}
   </ul>
-
-  <h3>Find words</h3>
-  <ul>
-    <li><a href="http://foks.info/search/?search_type=Simple&query=*{{translation.kanji}}">containing {{translation.kanji}}</a></li>
-    <li><a href="http://foks.info/search/?search_type=Simple&query={{translation.kanji}}*">starting with {{translation.kanji}}</a></li>
-    <li><a href="http://foks.info/search/?search_type=Simple&query=*{{translation.kanji}}">ending with {{translation.kanji}}</a></li>
-  </ul>
+{##}
+{#  <h3>Find words</h3>#}
+{#  <ul>#}
+{#    <li><a href="http://foks.info/search/?search_type=Simple&query=*{{translation.kanji}}">containing {{translation.kanji}}</a></li>#}
+{#    <li><a href="http://foks.info/search/?search_type=Simple&query={{translation.kanji}}*">starting with {{translation.kanji}}</a></li>#}
+{#    <li><a href="http://foks.info/search/?search_type=Simple&query=*{{translation.kanji}}">ending with {{translation.kanji}}</a></li>#}
+{#  </ul>#}
   </div>
 </div>
 {% endblock %}

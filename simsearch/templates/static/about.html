@@ -5,7 +5,10 @@
 
 <h2>What is it?</h2>
 
-<p>SimSearch is a visual search-by-similarity for Japanese kanji. Suppose you
+<p>SimSearch is a visual search-by-similarity for Japanese kanji initially created by Lars Yencken [1].
+
+</p>
+    <p>Suppose you
 encounter a kanji you don't know, but it looks very similar to one you do know.
 In this case, you can enter in the one you know as a query, and navigate
 through the similarity space until you find the kanji you are looking for.</p>
@@ -13,34 +16,30 @@ through the similarity space until you find the kanji you are looking for.</p>
 <h2>How does it work?</h2>
 
 <p>In order to determine how similar two kanji are to one another, we use the
-<em>stroke edit distance</em> between the two kanji [1]. In other words, we
+<em>stroke edit distance</em> between the two kanji [2]. In other words, we
 look at the sequence of strokes used to write each character, and determine how
 many changes you'd need to make to turn one kanji's series of strokes into that
 of the other kanji. Research so far has that this measure best matches human
-judgements of similarity [2].</p>
+judgements of similarity [3].</p>
 
 <p>Secondly, search is also adaptive. That is, it will adapt to whatever people
 actually find similar when they do searches using the system. For this, we use
-Q-learning [3], a well known algorithm for learning the best action to take in
+Q-learning [4], a well known algorithm for learning the best action to take in
 a state space. Q-learning has been used in a wide variety of search
 applications, including game players for board games which learn from
 experience.</p>
 
 <p>Fortunately, systems such as this do not need their own custom dictionaries
 of Japanese. For kanji translations and pronunciation, we use the excellent
-and free Kanjidic dictionary [4], and for layout we use RaphaelJS [5].</p>
-
-<h2>How can I help?</h2>
-
-<p>If you're a learner of Japanese, or a native speaker, please give the system
-a try, and send me some <a href="/feedback/">feedback</a>. If you're a
-programmer, note that SimSearch is open source, so feel free to suggest new
-improvements, or even try running your own site.</p>
+and free Kanjidic dictionary [5], and for layout we use RaphaelJS [6].</p>
 
 <hr>
 
 <h2>References</h2>
 <ol>
+<li>
+    The full source code to the first version is available on <a href="http://bitbucket.org/larsyencken/simsearch/">Bitbucket</a>
+</li>
 <li>Wikipedia: <a
 href="http://en.wikipedia.org/wiki/Levenshtein_distance">Levenshtein
 distance</a></li>

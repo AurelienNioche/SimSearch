@@ -5,11 +5,13 @@ Initially developed by Lars Yencken (https://github.com/larsyencken/simsearch).
 
 ## Dependencies
 
-* Python2 
+* Python3
+        
+        brew install python3 
 
-* Virtual env
+* Virtualenv
 
-        pip install virtualenv
+        pip3 install virtualenv
 
 * MongoDB
 
@@ -21,15 +23,20 @@ Initially developed by Lars Yencken (https://github.com/larsyencken/simsearch).
 * Ensure that a mongodb server is running
         
         brew services start mongodb
- 
- 
-* Execute the Makefile (create virtual environment, install dependencies, create models) [Inside project folder] 
+        
+* Create and activate virtual environment [Inside project folder] 
+        
+        cd SimSearch
+        virtualenv -p python3 env 
+        source env/bin/activate
+        
+* Install Cython for the virtualenv Python
+
+        pip install cython
+        
+* Execute the Makefile (create virtual environment if not already existing, install dependencies, create models) [Inside project folder] 
  
         make
-        
-* Active virtual environment [Inside project folder] 
-
-        source env/bin/activate
         
 
 ## Run

@@ -27,8 +27,8 @@ def check_connectivity(k=settings.N_NEIGHBOURS_RECALLED):
     for node in models.Node.objects:
         covered_set.update(n.kanji for n in node.neighbours[:k])
 
-    print '%d/%d (%.02f%%) covered' % (len(covered_set), len(kanji_set),
-                                       100.0 * len(covered_set) / len(kanji_set))
+    print(f'{len(covered_set)}/{len(kanji_set)} ({100.0 * len(covered_set) / len(kanji_set):.2f}) covered')
+
 
 # ---------------------------------------------------------------------------- #
 

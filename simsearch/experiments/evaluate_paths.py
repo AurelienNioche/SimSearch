@@ -18,13 +18,13 @@ import os
 import sys
 import optparse
 
-from simplestats import basic_stats
+import numpy as np
 
-from simulate_search import TraceFile
+from simsearch.experiments.simulate_search import TraceFile
 
 
 def evaluate_paths(input_file, limit=5):
-    print 'Evaluating paths from "%s"' % os.path.basename(input_file)
+    print(f'Evaluating paths from "{os.path.basename(input_file)}"')
     traces = TraceFile.load(input_file)
 
     path_lengths = []
@@ -36,9 +36,9 @@ def evaluate_paths(input_file, limit=5):
         else:
             path_lengths.append(limit)
 
-    print u'Success rate: %d/%d (%.02f%%)' % (len(successes), len(traces), 100.0 * len(successes) / len(traces))
+    print(f'Success rate: {len(successes)}/{len(traces)} ({100.0 * len(successes) / len(traces):.2f})')
 
-    print u'Mean path length: %.02f (σ = %.02f)' % basic_stats(path_lengths)
+    print(f'Mean path length: {np.mean(path_lengths):.2f} (σ = {np.std(path_lengths):.2f})')
 
 # ---------------------------------------------------------------------------- #
 

@@ -22,9 +22,8 @@ from cjktools import scripts
 from cjktools.resources import kanjidic
 from nltk.probability import FreqDist, LaplaceProbDist
 
-import stroke
-import heap_cache
-
+from simsearch import stroke
+from simsearch import heap_cache
 from simsearch import settings
 
 
@@ -42,7 +41,7 @@ class Similarity(mongoengine.Document):
 
     @classmethod
     def build(cls):
-        print 'Building similarity matrix'
+        print('Building similarity matrix')
         cls.drop_collection()
         sed = stroke.StrokeEditDistance()
         kanji_set = _get_kanji()
@@ -88,11 +87,23 @@ class Neighbour(mongoengine.EmbeddedDocument):
     kanji = mongoengine.StringField(max_length=1)
     weight = mongoengine.FloatField(min_value=0.0)
 
-    def __cmp__(self, rhs):
-        return cmp(self.weight, rhs.weight)
+    def __lt__(self, rhs):
+        return self.weight < rhs.weight
 
-    def __unicode__(self):
-        return self.kanji
+    def __le__(self, rhs):
+        return self.weight <= rhs.weight
+
+    def __eq__(self, rhs):
+        return self.weight == rhs.weight
+
+    def __ne__(self, rhs):
+        return self.weight != rhs.weight
+
+    def __gt__(self, rhs):
+        return self.weight > rhs.weight
+
+    def __ge__(self, rhs):
+        return self.weight >= rhs.weight
 
 
 class Node(mongoengine.Document):
@@ -116,7 +127,7 @@ class Node(mongoengine.Document):
     @classmethod
     def build(cls, cache=None):
         """Builds the initial graph for Q learning."""
-        print 'Building neighbourhood graph'
+        print('Building neighbourhood graph')
         n = settings.N_NEIGHBOURS_RECALLED
 
         if cache is None:
@@ -132,9 +143,9 @@ class Node(mongoengine.Document):
 
             for weight, partner in best_n:
                 weights[partner] = weight * dist.prob(partner)
-            total_weights = sum(weights.itervalues())
+            total_weights = sum(weights.values())
 
-            for partner, weight in sorted(weights.iteritems(), key=lambda p: p[1], reverse=True):
+            for partner, weight in sorted(weights.items(), key=lambda p: p[1], reverse=True):
                 node.neighbours.append(Neighbour(kanji=partner, weight=weight / total_weights))
             
             node.save()
@@ -143,12 +154,16 @@ class Node(mongoengine.Document):
     def _load_corpus_counts(cls):
         input_file = os.path.join(settings.DATA_DIR, 'jp_char_corpus_counts.gz')
         freq_dist = FreqDist()
-        with open(input_file, 'r') as istream:
-            istream = gzip.GzipFile(fileobj=istream)
-            istream = codecs.getreader('utf8')(istream)
+        with gzip.open(input_file, 'rb') as istream:
+
             for line in istream:
+
                 kanji, count = line.split()
-                # freq_dist.inc(kanji, count=int(count))  ## inc method is depreciated
+
+                # Decode
+                kanji = kanji.decode()
+                count = count.decode()
+
                 freq_dist[kanji] += int(count)
 
         return LaplaceProbDist(freq_dist)
@@ -174,14 +189,14 @@ class Node(mongoengine.Document):
         # Calculate Q'(s, a) in reverse order along the path
         # Q'(s, a) = (1 - A(s))Q(s, a) + A(s)*(r(a) + G * max_a Q(s', a))
         gamma = settings.UPDATE_GAMMA
-        for i in xrange(len(path) - 2, -1, -1):
+        for i in range(len(path) - 2, -1, -1):
             s = path[i]
             q_s = q[s]
             alpha = 1.0 / (4.0 + 0.5 * q_s.n_updates)
             
             # update very action available from state s
-            for a in sorted(q_s.neighbours, key=lambda n: n.weight,
-                    reverse=True):
+            for a in sorted(q_s.neighbours, key=lambda n: n.weight, reverse=True):
+
                 q_old = a.weight
 
                 r_a = (1 if a.kanji == path[-1] else 0)
@@ -255,7 +270,7 @@ class Translation(mongoengine.Document):
                 settings.KANJI_DIC,
                 settings.KANJI_D212
             ])
-        for entry in kjd.itervalues():
+        for entry in kjd.values():
             translation = cls(
                     kanji=entry.kanji,
                     on_readings=entry.on_readings,
@@ -267,8 +282,8 @@ class Translation(mongoengine.Document):
 
 def build():
     """Builds the database."""
-    cache = Similarity.build()
-    Node.build(cache)
+    # cache = Similarity.build()
+    Node.build(cache=None)
     Translation.build()
 
 # ---------------------------------------------------------------------------- #
@@ -298,4 +313,5 @@ def _get_kanji():
 
 
 if __name__ == '__main__':
+
     build()

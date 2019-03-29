@@ -33,8 +33,13 @@ cdef class StrokeEditDistance:
         i_stream = sopen(input_file)
         for i, line in enumerate(i_stream):
             kanji, raw_strokes = line.rstrip().split()
+
+            # Decode from bytes
+            kanji = kanji.decode()
+            raw_strokes = raw_strokes.decode()
+
             raw_strokes = raw_strokes.split(',')
-            strokes = map(self.get_stroke_type, raw_strokes)
+            strokes = list(map(self.get_stroke_type, raw_strokes))
             self.signatures[kanji] = strokes
         i_stream.close()
 
@@ -58,7 +63,6 @@ cdef class StrokeEditDistance:
     def __call__(self, kanji_a, kanji_b):
         s_py = self.signatures[kanji_a]
         t_py = self.signatures[kanji_b]
-
         result = edit_distance(s_py, t_py)
         return float(result) / max(len(s_py), len(t_py))
     

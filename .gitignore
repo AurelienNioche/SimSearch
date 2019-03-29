@@ -19,3 +19,4 @@ simsearch/stroke.so
 # MacOs
 .DS_Store
 
+*.so

@@ -4,4 +4,5 @@ nltk
 flask
 simplejson
 cython
-consoleLog>=0.2.4
+numpy
+tqdm

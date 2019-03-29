@@ -17,11 +17,7 @@ from setuptools.extension import Extension
 
 setup(
     name='simsearch',
-    author='Lars Yencken',
-    author_email='lars@yencken.org',
-    version='0.3.0',
-    description='Similarity search for Japanese kanji.',
-    url="http://simsearch.gakusha.info/",
+    version='1.0.0',
     license='BSD',
     install_requires=[
         'cjktools>=1.5.0',
@@ -30,8 +26,8 @@ setup(
         'flask',
         'simplejson',
         'cython',
-        'simplestats>=0.2.0',  # Only for experiments
-        'consoleLog>=0.2.4',   # Only for experiments
+        # 'simplestats>=0.2.0',  # Only for experiments
+        # 'consoleLog>=0.2.4',   # Only for experiments
         # # Not necessary?
         # 'cjktools-data>=0.2.1-2010-07-29',
         # 'simplestats>=0.2.0',

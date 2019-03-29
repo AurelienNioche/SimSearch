@@ -3,7 +3,7 @@ serve: .simsearch-installed .models-created
 	env/bin/python setup.py develop
 
 env: requirements.txt
-	test -d env || virtualenv -p python2.7 env
+	test -d env || virtualenv -p python3 env
 	env/bin/pip install -r requirements.txt
 	touch env
 
