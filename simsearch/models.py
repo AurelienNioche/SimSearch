@@ -282,8 +282,8 @@ class Translation(mongoengine.Document):
 
 def build():
     """Builds the database."""
-    # cache = Similarity.build()
-    Node.build(cache=None)
+    cache = Similarity.build()
+    Node.build(cache)
     Translation.build()
 
 # ---------------------------------------------------------------------------- #

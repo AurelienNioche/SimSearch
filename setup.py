@@ -26,6 +26,8 @@ setup(
         'flask',
         'simplejson',
         'cython',
+        'numpy',
+        'tqdm'
         # 'simplestats>=0.2.0',  # Only for experiments
         # 'consoleLog>=0.2.4',   # Only for experiments
         # # Not necessary?
