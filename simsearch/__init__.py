@@ -33,10 +33,10 @@ def help():
     return flask.render_template('static/help.html', **c)
 
 
-@app.route('/feedback/')
-def feedback():
-    c = base_context()
-    return flask.render_template("static/feedback.html", **c)
+# @app.route('/feedback/')
+# def feedback():
+#     c = base_context()
+#     return flask.render_template("static/feedback.html", **c)
 
 
 @app.route('/about/')
@@ -142,7 +142,7 @@ def base_context():
 #     #fctx = repo.filectx(project_base, 'tip')
 #
 #     return {'revision': {
-#                 'short': 'tamere',#mercurial.node.short(fctx.node()),
+#                 'short': '1.0.0',#mercurial.node.short(fctx.node()),
 #                 'number': 34,#fctx.rev(),
 #             }}
 

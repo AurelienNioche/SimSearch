@@ -5,7 +5,7 @@
 .container { width: 550px; }
 #pivot { font-size: 200px; vertical-align: middle; text-align: right; }
 .readings > tbody > tr > th { text-align: right; vertical-align: top; }
-td, th, p, h1, h2, h3 { font: 300px "Helvetica Neue", Helvetica, "Arial Unicode MS",
+td, th, p, h1, h2, h3 { font: 300 2em "Helvetica Neue", Helvetica, "Arial Unicode MS",
 Arial, sans-serif; }
 p, li, td, th { font-size: 1.2em }
 p { margin-left: 2em; } 
