@@ -23,6 +23,7 @@ Initially developed by Lars Yencken (https://github.com/larsyencken/simsearch).
 * Ensure that a mongodb server is running
         
         brew services start mongodb
+
         
 * Create and activate virtual environment [Inside project folder] 
         
@@ -44,4 +45,14 @@ Initially developed by Lars Yencken (https://github.com/larsyencken/simsearch).
 Run locally [Inside project folder and after activation of the virtual environment]
 
         python simsearch.py
+        
+        
+## Various
+
+To have launchd start mongodb now and restart at login:
+    
+    brew services start mongodb
+Or, if you don't want/need a background service you can just run:
+
+    mongod --config /usr/local/etc/mongod.conf
 
